@@ -98,3 +98,11 @@ print(f'Humidity: {humidity}%')
 print(f'Sunrise: {sunrise_time}')
 print(f'Sunset: {sunset_time}')
 print(f"Description: {description}")
+
+# Report
+print(f'------------------------REPORT----------------------------')
+print('CLOTHES: ' + temp_rec(temp_celsius))
+print('WIND: ' + wind_rec(wind_speed))
+print('HUMIDITY: ' + humidity_rec(humidity))
+print('OTHER: ' + add_rec(description))
+print(f'----------------------------------------------------------')
