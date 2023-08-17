@@ -86,3 +86,15 @@ def add_rec(desc):
         "Drive carefully, use low-beams"
     else:
         return "No Notes"
+
+
+# Message
+print(f'------------------------{CITY.upper()}----------------------')
+print(f'Temperature: {temp_celsius:.2f}°C | {temp_fahrenheit:.2f}°F')
+print(
+    f'Feels like : {feels_like_celsius:.2f}°C | {feels_like_fahrenheit:.2f}°F')
+print(f'Wind Speed: {wind_speed}m/s')
+print(f'Humidity: {humidity}%')
+print(f'Sunrise: {sunrise_time}')
+print(f'Sunset: {sunset_time}')
+print(f"Description: {description}")
