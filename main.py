@@ -33,3 +33,18 @@ sunrise_time = dt.datetime.utcfromtimestamp(
     response['sys']['sunrise'] + response['timezone'])
 sunset_time = dt.datetime.utcfromtimestamp(
     response['sys']['sunset'] + response['timezone'])
+
+
+# Recommendation Functions
+
+# Temperature Recommendation
+def temp_rec(temp_celsius):
+    temp_celsius = round(float(temp_celsius), 2)
+    if temp_celsius < 10:
+        return "JACKET, SWEATPANTS, WINTER SHOES"
+    elif temp_celsius < 20:
+        return "SWEATER, SWEATPANTS, CASUAL SHOES"
+    elif temp_celsius < 35:
+        return "SHORTS, RUNNING SHOES"
+    elif temp_celsius < 40:
+        return "HEAT WAVE"
