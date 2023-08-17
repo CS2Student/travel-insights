@@ -1,16 +1,17 @@
 import datetime as dt
 import requests
+import sys
 
 # Get API response
 BASE_URL = "http://api.openweathermap.org/data/2.5/weather?"
-
 with open('api_key', 'r') as file:
     API_KEY = file.read()
 
-CITY = "New York"
 
-url = BASE_URL + "appid=" + API_KEY + "&q=" + CITY
-response = requests.get(url).json()
+def get_forecast(city):
+    url = BASE_URL + "appid=" + API_KEY + "&q=" + city
+    response = requests.get(url).json()
+    return response
 
 
 # Temperature conversion function
@@ -18,21 +19,6 @@ def kelvin_to_celsius_fahrenheit(kelvin):
     celsius = kelvin - 273.15
     fahrenheit = celsius * (9/5) + 32
     return celsius, fahrenheit
-
-
-# Parse necessary values
-temp_kelvin = response['main']['temp']
-temp_celsius, temp_fahrenheit = kelvin_to_celsius_fahrenheit(temp_kelvin)
-feels_like_kelvin = response['main']['feels_like']
-feels_like_celsius, feels_like_fahrenheit = kelvin_to_celsius_fahrenheit(
-    feels_like_kelvin)
-wind_speed = response['wind']['speed']
-humidity = response['main']['humidity']
-description = response['weather'][0]['description']
-sunrise_time = dt.datetime.utcfromtimestamp(
-    response['sys']['sunrise'] + response['timezone'])
-sunset_time = dt.datetime.utcfromtimestamp(
-    response['sys']['sunset'] + response['timezone'])
 
 
 # Recommendation Functions
@@ -88,21 +74,48 @@ def add_rec(desc):
         return "No Notes"
 
 
-# Message
-print(f'------------------------{CITY.upper()}----------------------')
-print(f'Temperature: {temp_celsius:.2f}°C | {temp_fahrenheit:.2f}°F')
-print(
-    f'Feels like : {feels_like_celsius:.2f}°C | {feels_like_fahrenheit:.2f}°F')
-print(f'Wind Speed: {wind_speed}m/s')
-print(f'Humidity: {humidity}%')
-print(f'Sunrise: {sunrise_time}')
-print(f'Sunset: {sunset_time}')
-print(f"Description: {description}")
+def main():
+    if len(sys.argv) != 2:
+        print("Usage: python main.py <city>                : (City Weather Report)")
+        print("Usage: python main.py <city> <another city> : (Avoiding Jetlag Report)")
+        sys.exit(1)
 
-# Report
-print(f'------------------------REPORT----------------------------')
-print('CLOTHES: ' + temp_rec(temp_celsius))
-print('WIND: ' + wind_rec(wind_speed))
-print('HUMIDITY: ' + humidity_rec(humidity))
-print('OTHER: ' + add_rec(description))
-print(f'----------------------------------------------------------')
+    city = sys.argv[1]
+    forecast_data = get_forecast(city)
+
+    # Parse necessary values
+    temp_kelvin = forecast_data['main']['temp']
+    temp_celsius, temp_fahrenheit = kelvin_to_celsius_fahrenheit(temp_kelvin)
+    feels_like_kelvin = forecast_data['main']['feels_like']
+    feels_like_celsius, feels_like_fahrenheit = kelvin_to_celsius_fahrenheit(
+        feels_like_kelvin)
+    wind_speed = forecast_data['wind']['speed']
+    humidity = forecast_data['main']['humidity']
+    description = forecast_data['weather'][0]['description']
+    sunrise_time = dt.datetime.utcfromtimestamp(
+        forecast_data['sys']['sunrise'] + forecast_data['timezone'])
+    sunset_time = dt.datetime.utcfromtimestamp(
+        forecast_data['sys']['sunset'] + forecast_data['timezone'])
+
+    # Message
+    print(f'------------------------{city.upper()}----------------------')
+    print(f'Temperature: {temp_celsius:.2f}°C | {temp_fahrenheit:.2f}°F')
+    print(
+        f'Feels like : {feels_like_celsius:.2f}°C | {feels_like_fahrenheit:.2f}°F')
+    print(f'Wind Speed: {wind_speed}m/s')
+    print(f'Humidity: {humidity}%')
+    print(f'Sunrise: {sunrise_time}')
+    print(f'Sunset: {sunset_time}')
+    print(f"Description: {description}")
+
+    # Report
+    print(f'------------------------REPORT----------------------------')
+    print('CLOTHES: ' + temp_rec(temp_celsius))
+    print('WIND: ' + wind_rec(wind_speed))
+    print('HUMIDITY: ' + humidity_rec(humidity))
+    print('OTHER: ' + add_rec(description))
+    print(f'----------------------------------------------------------')
+
+
+if __name__ == "__main__":
+    main()
