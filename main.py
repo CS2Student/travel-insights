@@ -72,3 +72,17 @@ def humidity_rec(humidity):
         return "Air is sticky"
     else:
         return "Moist. Very Moist. Unhealthy."
+
+
+# Additional Recommendations
+def add_rec(desc):
+    if "rain" in desc:
+        return "Bring an umbrella if going out"
+    if "thunder" in desc:
+        return "Thunder! Stay inside or keep yourself short if going outside"
+    if "snow" in desc:
+        return "Bring snow gear"
+    if "fog" in desc:
+        "Drive carefully, use low-beams"
+    else:
+        return "No Notes"
