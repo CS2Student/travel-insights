@@ -60,3 +60,15 @@ def wind_rec(wind_speed):
         return "The breeze is strong today, good luck walking to class"
     else:
         return "Prepare to fly"
+
+
+# Humidity Recommendation
+def humidity_rec(humidity):
+    if humidity < 30:
+        return "Bit dry out today, moisturize and hydrate"
+    elif humidity < 55:
+        return "Normal conditions"
+    elif humidity < 65:
+        return "Air is sticky"
+    else:
+        return "Moist. Very Moist. Unhealthy."
