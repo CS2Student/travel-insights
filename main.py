@@ -48,3 +48,15 @@ def temp_rec(temp_celsius):
         return "SHORTS, RUNNING SHOES"
     elif temp_celsius < 40:
         return "HEAT WAVE"
+
+
+# Wind Speed Recommendation
+def wind_rec(wind_speed):
+    if wind_speed < 5:
+        return "It's calm outside"
+    elif wind_speed < 10:
+        return "There is a moderate breeze outside"
+    elif wind_speed < 20:
+        return "The breeze is strong today, good luck walking to class"
+    else:
+        return "Prepare to fly"
