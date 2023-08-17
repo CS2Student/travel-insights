@@ -43,7 +43,7 @@ def wind_rec(wind_speed):
     elif wind_speed < 10:
         return "There is a moderate breeze outside"
     elif wind_speed < 20:
-        return "The breeze is strong today, good luck walking to class"
+        return "The breeze is strong today, good luck walking outside"
     else:
         return "Prepare to fly"
 
@@ -74,47 +74,79 @@ def add_rec(desc):
         return "No Notes"
 
 
+# Calculate when to sleep to avoid jetlag
+def jetlag_rec(sleep_time):
+    hours, mins = map(int, sleep_time.split(':'))
+    total_mins = (hours * 60) + mins
+
+    if (total_mins < 0 or total_mins > 1440):
+        print('Invalid Time')
+        return False
+    else:
+        # Calculate when to sleep
+        # Print when to sleep
+        return True
+
+
 def main():
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 2 and len(sys.argv) != 3:
         print("Usage: python main.py <city>                : (City Weather Report)")
         print("Usage: python main.py <city> <another city> : (Avoiding Jetlag Report)")
         sys.exit(1)
 
-    city = sys.argv[1]
-    forecast_data = get_forecast(city)
+    # City Weather Report
+    if len(sys.argv) == 2:
+        city = sys.argv[1]
 
-    # Parse necessary values
-    temp_kelvin = forecast_data['main']['temp']
-    temp_celsius, temp_fahrenheit = kelvin_to_celsius_fahrenheit(temp_kelvin)
-    feels_like_kelvin = forecast_data['main']['feels_like']
-    feels_like_celsius, feels_like_fahrenheit = kelvin_to_celsius_fahrenheit(
-        feels_like_kelvin)
-    wind_speed = forecast_data['wind']['speed']
-    humidity = forecast_data['main']['humidity']
-    description = forecast_data['weather'][0]['description']
-    sunrise_time = dt.datetime.utcfromtimestamp(
-        forecast_data['sys']['sunrise'] + forecast_data['timezone'])
-    sunset_time = dt.datetime.utcfromtimestamp(
-        forecast_data['sys']['sunset'] + forecast_data['timezone'])
+        forecast_data = get_forecast(city)
+        print(forecast_data)
 
-    # Message
-    print(f'------------------------{city.upper()}----------------------')
-    print(f'Temperature: {temp_celsius:.2f}°C | {temp_fahrenheit:.2f}°F')
-    print(
-        f'Feels like : {feels_like_celsius:.2f}°C | {feels_like_fahrenheit:.2f}°F')
-    print(f'Wind Speed: {wind_speed}m/s')
-    print(f'Humidity: {humidity}%')
-    print(f'Sunrise: {sunrise_time}')
-    print(f'Sunset: {sunset_time}')
-    print(f"Description: {description}")
+        # Parse necessary values
+        temp_kelvin = forecast_data['main']['temp']
+        temp_celsius, temp_fahrenheit = kelvin_to_celsius_fahrenheit(
+            temp_kelvin)
+        feels_like_kelvin = forecast_data['main']['feels_like']
+        feels_like_celsius, feels_like_fahrenheit = kelvin_to_celsius_fahrenheit(
+            feels_like_kelvin)
+        wind_speed = forecast_data['wind']['speed']
+        humidity = forecast_data['main']['humidity']
+        description = forecast_data['weather'][0]['description']
+        sunrise_time = dt.datetime.utcfromtimestamp(
+            forecast_data['sys']['sunrise'] + forecast_data['timezone'])
+        sunset_time = dt.datetime.utcfromtimestamp(
+            forecast_data['sys']['sunset'] + forecast_data['timezone'])
 
-    # Report
-    print(f'------------------------REPORT----------------------------')
-    print('CLOTHES: ' + temp_rec(temp_celsius))
-    print('WIND: ' + wind_rec(wind_speed))
-    print('HUMIDITY: ' + humidity_rec(humidity))
-    print('OTHER: ' + add_rec(description))
-    print(f'----------------------------------------------------------')
+        # Message
+        print(f'------------------------{city.upper()}----------------------')
+        print(f'Temperature: {temp_celsius:.2f}°C | {temp_fahrenheit:.2f}°F')
+        print(
+            f'Feels like : {feels_like_celsius:.2f}°C | {feels_like_fahrenheit:.2f}°F')
+        print(f'Wind Speed: {wind_speed}m/s')
+        print(f'Humidity: {humidity}%')
+        print(f'Sunrise: {sunrise_time}')
+        print(f'Sunset: {sunset_time}')
+        print(f"Description: {description}")
+
+        # Report
+        print(f'------------------------REPORT----------------------------')
+        print('CLOTHES: ' + temp_rec(temp_celsius))
+        print('WIND: ' + wind_rec(wind_speed))
+        print('HUMIDITY: ' + humidity_rec(humidity))
+        print('OTHER: ' + add_rec(description))
+        print(f'----------------------------------------------------------')
+
+    # Avoiding Jetlag Report
+    if len(sys.argv) == 3:
+        # Get desired sleep time
+        while True:
+            try:
+                print('Usage: 24 hr clock | Usage: HH:MM | Ex. 10:30')
+                time_input = input(
+                    "At your destination, what is your desired sleep time?: ")
+                if jetlag_rec(time_input):
+                    break
+            except (ValueError, IndexError):
+                print('Invalid Time')
 
 
 if __name__ == "__main__":
