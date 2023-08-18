@@ -87,9 +87,6 @@ def jetlag_rec_aux(desired_sleep_time, time_difference):
     rec_mins = int(sleep_time_rec % 60)
     rec_hrs = int((sleep_time_rec - rec_mins) / 60)
 
-    print(f"Hours: {rec_hrs}")
-    print(f"Mins: {rec_mins}")
-
     return f"{rec_hrs:02d}:{rec_mins:02d}"
 
 
@@ -111,14 +108,12 @@ def jetlag_rec(sleep_time, origin, destination):
         # Convert seconds into mins
         time_difference = (origin_time - destination_time) / 60
 
-        print(f"Origin Time: {origin_time}")
-        print(f"Destination Time: {destination_time}")
-        print(f"Time Difference: {time_difference}")
-
         # Calculate when to sleep
         sleep_time_rec = jetlag_rec_aux(total_mins, time_difference)
-        print(sleep_time_rec)
-
+        print(f"SLEEP AT {sleep_time_rec} LOCAL TIME")
+        print("In order to prepare yourself for this sleep schedule, spend the days leading up to your trip getting closer to this sleep time.")
+        print("To ease into this sleep schedule, it is recommended you sleep one hour closer to this time each day until you get to your desired sleep time")
+        print("Having done this, you should be able to then travel to your desired destination jetlag free! Use this program again when you are ready to travel back! :)")
         return True
 
 
