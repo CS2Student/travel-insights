@@ -74,24 +74,58 @@ def add_rec(desc):
         return "No Notes"
 
 
+# jetlag_rec auxilliary
+def jetlag_rec_aux(desired_sleep_time, time_difference):
+    # Origin time ahead of destination time
+    if time_difference > 0:
+        pass
+    # Destination time ahead of origin time
+    else:
+        pass
+
+    sleep_time_rec = (desired_sleep_time + time_difference) % 1440
+    rec_mins = int(sleep_time_rec % 60)
+    rec_hrs = int((sleep_time_rec - rec_mins) / 60)
+
+    print(f"Hours: {rec_hrs}")
+    print(f"Mins: {rec_mins}")
+
+    return f"{rec_hrs:02d}:{rec_mins:02d}"
+
+
 # Calculate when to sleep to avoid jetlag
-def jetlag_rec(sleep_time):
+def jetlag_rec(sleep_time, origin, destination):
     hours, mins = map(int, sleep_time.split(':'))
     total_mins = (hours * 60) + mins
 
-    if (total_mins < 0 or total_mins > 1440):
-        print('Invalid Time')
+    if ((hours < 0 or hours > 24 or mins < 0 or mins > 59) or (hours == 24 and mins != 0)):
         return False
     else:
+        # Fetch City Information
+        origin_data = get_forecast(origin)
+        destination_data = get_forecast(destination)
+
+        # Extract UTC time
+        origin_time = origin_data['timezone']
+        destination_time = destination_data['timezone']
+        # Convert seconds into mins
+        time_difference = (origin_time - destination_time) / 60
+
+        print(f"Origin Time: {origin_time}")
+        print(f"Destination Time: {destination_time}")
+        print(f"Time Difference: {time_difference}")
+
         # Calculate when to sleep
-        # Print when to sleep
+        sleep_time_rec = jetlag_rec_aux(total_mins, time_difference)
+        print(sleep_time_rec)
+
         return True
 
 
 def main():
     if len(sys.argv) != 2 and len(sys.argv) != 3:
-        print("Usage: python main.py <city>                : (City Weather Report)")
-        print("Usage: python main.py <city> <another city> : (Avoiding Jetlag Report)")
+        print("Usage: python main.py <city>                 : (City Weather Report)")
+        print("Usage: python main.py <origin> <destination> : (Avoiding Jetlag Report)")
         sys.exit(1)
 
     # City Weather Report
@@ -137,16 +171,20 @@ def main():
 
     # Avoiding Jetlag Report
     if len(sys.argv) == 3:
+        # Get City Data
+        city1 = sys.argv[1]
+        city2 = sys.argv[2]
+
         # Get desired sleep time
         while True:
             try:
                 print('Usage: 24 hr clock | Usage: HH:MM | Ex. 10:30')
                 time_input = input(
-                    "At your destination, what is your desired sleep time?: ")
-                if jetlag_rec(time_input):
+                    "When you arrive at your destination, what time would you like to set as your desired sleep time?: ")
+                if jetlag_rec(time_input, city1, city2):
                     break
             except (ValueError, IndexError):
-                print('Invalid Time')
+                pass
 
 
 if __name__ == "__main__":
