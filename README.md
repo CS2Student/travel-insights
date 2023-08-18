@@ -7,7 +7,7 @@ prepare for the the time difference between your origin and destination.
 ### Functionality
 * Provides outfit and weather recommendations based on temperature, wind speed, and humidity of specified city
 * Offers additional recommendations for rain, thunder, snow, fog, and clear sky conditions
-* Calculates when you should sleep to avoit jetlag when travelling between different timezones
+* Calculates when you should sleep to avoid jetlag when travelling between different timezones
 
 ### Built with 
 * Python
