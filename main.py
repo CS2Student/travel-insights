@@ -16,8 +16,8 @@ def get_forecast(city):
 
 # Temperature conversion function
 def kelvin_to_celsius_fahrenheit(kelvin):
-    celsius = kelvin - 273.15
-    fahrenheit = celsius * (9/5) + 32
+    celsius = round(kelvin - 273.15, 2)
+    fahrenheit = round(celsius * (9/5) + 32, 2)
     return celsius, fahrenheit
 
 
@@ -110,11 +110,7 @@ def jetlag_rec(sleep_time, origin, destination):
 
         # Calculate when to sleep
         sleep_time_rec = jetlag_rec_aux(total_mins, time_difference)
-        print(f"SLEEP AT {sleep_time_rec} LOCAL TIME")
-        print("In order to prepare yourself for this sleep schedule, spend the days leading up to your trip getting closer to this sleep time.")
-        print("To ease into this sleep schedule, it is recommended you sleep one hour closer to this time each day until you get to your desired sleep time")
-        print("Having done this, you should be able to then travel to your desired destination jetlag free! Use this program again when you are ready to travel back! :)")
-        return True
+        return sleep_time_rec
 
 
 def main():
@@ -176,7 +172,12 @@ def main():
                 print('Usage: 24 hr clock | Usage: HH:MM | Ex. 10:30')
                 time_input = input(
                     "When you arrive at your destination, what time would you like to set as your desired sleep time?: ")
-                if jetlag_rec(time_input, city1, city2):
+                rec_time = jetlag_rec(time_input, city1, city2)
+                if rec_time:
+                    print(f"SLEEP AT {rec_time} LOCAL TIME")
+                    print("In order to prepare yourself for this sleep schedule, spend the days leading up to your trip getting closer to this sleep time.")
+                    print("To ease into this sleep schedule, it is recommended you sleep one hour closer to this time each day until you get to your desired sleep time")
+                    print("Having done this, you should be able to then travel to your desired destination jetlag free! Use this program again when you are ready to travel back! :)")
                     break
             except (ValueError, IndexError):
                 pass
